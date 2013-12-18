@@ -8,8 +8,6 @@ from SublimePushBullet.pypushbullet.pushbullet import PushBullet
 
 
 
-# from pypushbullet import *
-
 # SublimePushBullet Settings
 settings = None
 
@@ -24,7 +22,6 @@ except:
 
 class SublimePushBulletCommand(sublime_plugin.TextCommand):
     def run(self, edit):
-        print ("This is the migrated plugin")
 
         globals()['user_settings'] = sublime.load_settings(
             'Preferences.sublime-settings')
@@ -62,7 +59,7 @@ class SublimePushBulletCommand(sublime_plugin.TextCommand):
                     print("%s %s %s" % (
                     device["id"], device["extras"]["manufacturer"],
                     device["extras"]["model"]))
-            return
+
             note = p.pushNote(devices[0]["id"], 'From Sublime', s)
             if "created" in note:
                 print("OK")
@@ -70,30 +67,7 @@ class SublimePushBulletCommand(sublime_plugin.TextCommand):
                 print("ERROR %s" % (note))
 
 
-    # def getDevices(args):
-    #     p = PushBullet(args.api_key)
-    #     try:
-    #         devices = p.getDevices()
-    #     except HTTPError:
-    #         _, e, _ = sys.exc_info()
-    #         print("The server couldn\'t fulfill the request.")
-    #         print("Error code: %s" % (e.code))
-    #     except URLError:
-    #         _, e, _ = sys.exc_info()
-    #         print("We failed to reach a server.")
-    #         print("Reason: %s" % (e.reason))
-    #     else:
-    #         if args.json:
-    #             print(devices)
-    #             return
-    #         for device in devices:
-    #             if "nickname" in device["extras"]:
-    #                 print(
-    #                 "%s %s" % (device["id"], device["extras"]["nickname"]))
-    #             else:
-    #                 print("%s %s %s" % (
-    #                 device["id"], device["extras"]["manufacturer"],
-    #                 device["extras"]["model"]))
+
 
 
 # def plugin_loaded():
