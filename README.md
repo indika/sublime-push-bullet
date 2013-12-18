@@ -1,5 +1,8 @@
-pyPushBullet
-============
+Sublime Push Bullet
+===================
+
+
+Forked from: pyPushBullet
 
 Python library to interface with PushBullet
 
