@@ -1,8 +1,12 @@
 Sublime Push Bullet
 ===================
 
+I stumbled across pyPushBullet, I liked it. I like Sublime Text, combine the two to achieve greatness.
 
-Forked from: pyPushBullet
+
+
+
+
 
 Python library to interface with PushBullet
 
