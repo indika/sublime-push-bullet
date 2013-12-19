@@ -22,16 +22,11 @@ except:
 class SublimePushBulletCommand(sublime_plugin.TextCommand):
     def run(self, edit):
 
-        # Should support multiple selections
-        view = self.view
-        for region in view.sel():
-            if region.empty():
-                print ("Region is empty")
-                return
+        contents = self.text_selection()
+        if contents is None:
+            sublime.status_message("No selection made to push...")
+            return
 
-        s = view.substr(region)
-        print (s)
-        print (type(settings))
 
         api_key = settings.get('api_key', False)
         if not api_key:
@@ -67,13 +62,17 @@ class SublimePushBulletCommand(sublime_plugin.TextCommand):
             else:
                 print("ERROR %s" % (note))
 
+    def text_selection(self):
+        regions = self.view.sel()
+        combined = ''
+        for region in regions:
+            if not region.empty():
+                combined = combined + self.view.substr(region) + '\n\n'
+        if combined == '':
+            return None
+        else:
+            return combined
 
 
-
-
-# def plugin_loaded():
-#     print ("SPB: Setting timeout")
-#     sublime.set_timeout(init, 200)
-
-
-
+    def document_title(self):
+        pass
