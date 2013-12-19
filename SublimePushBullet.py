@@ -9,10 +9,9 @@ from SublimePushBullet.pypushbullet.pushbullet import PushBullet
 
 
 # SublimePushBullet Settings
-settings = None
+settings = sublime.load_settings("SublimePushBullet.sublime-settings")
 
-# Default ST settings
-user_settings = None
+
 
 try:
     from urllib.request import URLError, HTTPError
@@ -23,11 +22,7 @@ except:
 class SublimePushBulletCommand(sublime_plugin.TextCommand):
     def run(self, edit):
 
-        globals()['user_settings'] = sublime.load_settings(
-            'Preferences.sublime-settings')
-        globals()['settings'] = sublime.load_settings(
-            'SublimePushBullet.sublime-settings')
-
+        # Should support multiple selections
         view = self.view
         for region in view.sel():
             if region.empty():
@@ -36,8 +31,14 @@ class SublimePushBulletCommand(sublime_plugin.TextCommand):
 
         s = view.substr(region)
         print (s)
+        print (type(settings))
 
-        api_key = user_settings.get('pushbullet_api_key', True)
+        api_key = settings.get('api_key', False)
+        if not api_key:
+            sublime.message_dialog("The API key was not found in the settings")
+            # sublime.status_message("The API key was not found in the settings")
+            pass
+
         p = PushBullet(api_key)
 
         try:

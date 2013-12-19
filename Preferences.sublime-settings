@@ -1,9 +1,0 @@
-{
-    // ---------------------------  README -----------------------------------
-    //  Copy these key/values to User/Preferences.sublime-settings
-    //  They have NO effect here
-
-    // Push Bullet API Key
-    "pushbullet_api_key": "123",
-
-}
