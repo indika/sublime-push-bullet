@@ -7,6 +7,7 @@ import threading
 from SublimePushBullet.pypushbullet.pushbullet import PushBullet
 
 
+# Versio 0.1
 
 # SublimePushBullet Settings
 settings = sublime.load_settings("SublimePushBullet.sublime-settings")
@@ -24,8 +25,6 @@ class SublimePushBulletCommand(sublime_plugin.TextCommand):
     threads = []
 
     def run(self, edit):
-
-
 
         contents = self.text_selection()
         if contents is None:
