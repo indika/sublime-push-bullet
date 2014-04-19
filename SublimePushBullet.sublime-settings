@@ -1,12 +1,12 @@
 {
+
     // Copy any modified settings to `User/SublimePushBullet.sublime-settings`
     // otherwise modifications will not survive updates.
 
-
     // Push Bullet API Key
-    "api_key": "aefec4f91f309efaf903bbfb645c7fca",
+    "api_key": "1",
 
     // Default devices to push to
-    "default_devices": ["1"],
+    "default_devices": ["73944"]
 
 }

@@ -2,7 +2,7 @@ import sublime
 import sublime_plugin
 import sys
 import imp
-
+import threading
 
 from SublimePushBullet.pypushbullet.pushbullet import PushBullet
 
@@ -20,7 +20,12 @@ except:
 
 
 class SublimePushBulletCommand(sublime_plugin.TextCommand):
+
+    threads = []
+
     def run(self, edit):
+
+
 
         contents = self.text_selection()
         if contents is None:
@@ -34,7 +39,70 @@ class SublimePushBulletCommand(sublime_plugin.TextCommand):
             # sublime.status_message("The API key was not found in the settings")
             pass
 
-        p = PushBullet(api_key)
+        thread = APICallClass(api_key, self.text_selection())
+        self.threads.append(thread)
+        thread.start()
+        sublime.set_timeout(lambda: self.iterate_threads(), 100)
+
+        i = 3
+        before = i % 8
+        after = (7) - before
+        self.view.set_status('prefixr', 'Prefixr [%s=%s]' % \
+        (' ' * before, ' ' * after))
+
+
+
+        return
+
+
+
+    def text_selection(self):
+        regions = self.view.sel()
+        combined = ''
+        for region in regions:
+            if not region.empty():
+                combined = combined + self.view.substr(region) + '\n\n'
+        if combined == '':
+            return None
+        else:
+            return combined
+
+
+    def document_title(self):
+        pass
+
+    def iterate_threads(self):
+        print ("Iterating threads")
+        next_threads = []
+        for thread in self.threads:
+            if thread.is_alive():
+                next_threads.append(thread)
+        self.threads = next_threads
+        if len(self.threads):
+            print ("Threads exist, so calling timeout again")
+            for thread in self.threads:
+                print (thread)
+            sublime.set_timeout(lambda: self.iterate_threads(), 100)
+        pass
+
+
+
+
+class APICallClass(threading.Thread):
+    pass
+
+    def __init__(self, api_key, s):
+        self.api_key = api_key
+        self.s = s
+        threading.Thread.__init__(self)
+        pass
+
+    def run(self):
+        print ("The thread is running")
+        # sleep (10)
+        self.result = "this is the result"
+
+        p = PushBullet(self.api_key)
 
         try:
             devices = p.getDevices()
@@ -56,23 +124,8 @@ class SublimePushBulletCommand(sublime_plugin.TextCommand):
                     device["id"], device["extras"]["manufacturer"],
                     device["extras"]["model"]))
 
-            note = p.pushNote(devices[0]["id"], 'From Sublime', s)
+            note = p.pushNote(devices[0]["id"], 'From Sublime', self.s)
             if "created" in note:
                 print("OK")
             else:
                 print("ERROR %s" % (note))
-
-    def text_selection(self):
-        regions = self.view.sel()
-        combined = ''
-        for region in regions:
-            if not region.empty():
-                combined = combined + self.view.substr(region) + '\n\n'
-        if combined == '':
-            return None
-        else:
-            return combined
-
-
-    def document_title(self):
-        pass
